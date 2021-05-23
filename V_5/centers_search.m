@@ -15,7 +15,7 @@ centers = cell(y_state_limit, x_state_limit);
 
 for i = 1:y_state_limit
     for j = 1:x_state_limit
-     centers{i, j}(1, 1) = x_min_temp + (x_max_temp - x_min_temp)/2;
+     centers{i, j}(1, 1) = x_min_temp + (x_max_temp - x_min_temp)/2; 
      centers{i, j}(2, 1) = y_min_temp + (y_max_temp - y_min_temp)/2;
      x_min_temp = x_max_temp; %Changing the x limit
      x_max_temp = x_max_temp + delta_x; 

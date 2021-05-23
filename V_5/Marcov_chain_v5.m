@@ -3,15 +3,15 @@ clear all
 
 importfile('data.mat');
 
-x_state_limit = 108;
-y_state_limit = 101;
+x_state_limit = 55;
+y_state_limit = 51;
 x_min = 0;
 x_max = 70;
 y_min = -50;
-y_max = 30;
+y_max = 31;
 
 %Assigning values
-values = movement_type(data_union, 1);
+values = movement_type(data_union, 17);
 
 %Cell array of series
 series = series_splitting(values);
@@ -26,6 +26,11 @@ for i = 1:length(series)
 end
 
 angles = [array(1, :); array(2, :)];
+
+createFigure;
+plot(angles(1, :), angles(2, :),'b.');
+title('Test');
+grid on;
 
 %Creating states
 states = create_states(series, x_state_limit, y_state_limit, x_min, x_max, y_min, y_max);
@@ -42,7 +47,8 @@ transition_matrix = create_trans_matrix(states, transition_frequencies_matrix);
 %Creating centers
 centers = centers_search(x_state_limit, y_state_limit, x_min, x_max, y_min, y_max);
 
-current_state = [2; 7];
+current_state = [2; -2];
+% n = find_state(centers, current_state);
 
 %Prediction
 states_sequence = generate_new_states(transition_matrix, current_state, centers, angles);
@@ -52,33 +58,4 @@ STD = std(angles(1, :), states_sequence(1, :));
 
 %%
 %State plot
-createFigure;
-plot(angles(1, :), angles(2, :),'b.');
-hold on
-plot(states_sequence(1, :), states_sequence(2, :),'r.');
-title('Gait');
-legend('Original data','Predicted data');
-grid on;
-
-createFigure;
-plot(array(3, :), array(1, :),'b');
-hold on;
-plot(array(3, :), states_sequence(1, :),'r');
- xlim ([446 456]);
-%  ylim ([-0.1 1.1]);
-title('Gait (partition)');
-legend('Original data','Predicted data');
-grid on;
-
-
-createFigure;
-hold on;
-plot(array(3, :), array(1, :), 'b');
-title('Gait knee angle data');
-grid on;
-
-createFigure;
-hold on;
-plot(array(3, :), states_sequence(1, :), 'r');
-title('Gait knee angle prediction');
-grid on;
+print_graph(angles, states_sequence, 'Stairs ascending');
